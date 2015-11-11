@@ -132,136 +132,114 @@ for line in tweets_file:
     except:
         continue
 
-# The most common single words
+#### Define output text files and figures
 
-most_common_100_words= count_all.most_common(100)
+def common_text_plot_output(count,output_file,rotation_angle,y_lable_text,title_text,fig_output_name):
 
-most_common_25_words= count_all.most_common(25)
+    # Write output files
 
-most_common_word_output = open(the_most_common_word_file, 'w')
+    most_common_100= count.most_common(100)
 
-most_common_word_output.write("%s\n" % '\n '.join(map(str, most_common_100_words)))
+    most_common_25= count.most_common(25)
 
-most_common_word_output.close()
+    most_common_output = open(output_file, 'w')
 
-# The most common hash tags
+    most_common_output.write("%s\n" % '\n '.join(map(str, most_common_100)))
 
-most_common_100_hash= count_all_hash.most_common(100)
+    most_common_output.close()
 
-most_common_25_hash= count_all_hash.most_common(25)
+    # Plot the most common words/bigrams/hashtags
 
-most_common_hash_output = open(the_most_common_hash_file, 'w')
+    words = [x[0] for x in most_common_25]
 
-most_common_hash_output.write("%s\n" % '\n '.join(map(str, most_common_100_hash)))
+    values = [int(x[1]) for x in most_common_25]
 
-most_common_hash_output.close()
+    width=0.6
+    
+    mybar = plt.bar(range(len(words)), values, color='green', alpha=0.4)
+    
+    ax = plt.axes()
+    
+    x_pos = list(range(len(words)))
+    
+    ax.set_xticks([p + 0.4 * width for p in x_pos])
+    
+    ax.set_xticklabels(words, rotation=rotation_angle, fontsize=12) # make the most common word as angled labels
+    
+    plt.ylabel(y_lable_text,fontsize=20)
+    
+    plt.title(title_text,fontsize=20)
+    
+    plt.legend()
+    
+    plt.tight_layout()  # Give the x axis label more space
+    
+    plt.savefig(fig_output_name)
+    
+    plt.close()
 
-# The most common 100 bigrams
+    return
 
-most_common_100_bigrams= count_all_bigram.most_common(100)
+#### Define output text files
 
-most_common_25_bigrams= count_all_bigram.most_common(25)
+def common_text_output(count,output_file):
 
-most_common_bigram_output = open(the_most_common_bigram_file, 'w')
+    # Write output files
 
-most_common_bigram_output.write("%s\n" % '\n '.join(map(str, most_common_100_bigrams)))
+    most_common_100= count.most_common(100)
 
-most_common_bigram_output.close()
+    most_common_25= count.most_common(25)
 
-# The most common 100 bigrams
+    most_common_output = open(output_file, 'w')
 
-most_common_100_key_word_cooccurrence= count_search.most_common(100)
+    most_common_output.write("%s\n" % '\n '.join(map(str, most_common_100)))
 
-most_common_25_key_word_cooccurrence= count_search.most_common(25)
+    most_common_output.close()
 
-most_common_key_word_cooccurrence_output = open(the_most_common_key_word_count_file, 'w')
+    return
 
-most_common_key_word_cooccurrence_output.write("%s\n" % '\n '.join(map(str, most_common_100_key_word_cooccurrence)))
+#### The most common single words outputs
 
-most_common_key_word_cooccurrence_output.close()
+#common_info_output(count, output_file, plot: x-axis legend rotation_angle, plot: y_lable_text, plot: title_text):
 
-# The most common donate words with the key words
+common_text_plot_output(count_all,the_most_common_word_file,'50','Word Count','Hillary Related Tweets: The 25 Most Common Word Chart',the_most_common_word_plot)
 
-most_common_100_donate_word_cooccurrence = count_donate.most_common(100)
+#### The most common hash tags outputs
 
-most_common_25_donate_word_cooccurrence = count_donate.most_common(25)
+#common_info_output(count, output_file, plot: x-axis legend rotation_angle, plot: y_lable_text, plot: title_text):
 
-most_common_donate_word_cooccurrence_output = open(the_most_common_donate_word_count_file, 'w')
+common_text_plot_output(count_all_hash,the_most_common_hash_file,'70','Hashtag Count','Hillary Related Tweets: The 25 Most Common Hashtags Chart',the_most_common_hash_plot)
 
-most_common_donate_word_cooccurrence_output.write("%s\n" % '\n '.join(map(str, most_common_100_donate_word_cooccurrence)))
+#### The most common 100 bigrams
 
-most_common_donate_word_cooccurrence_output.close()
+#common_info_output(count, output_file, plot: x-axis legend rotation_angle, plot: y_lable_text, plot: title_text):
+
+common_text_plot_output(count_all_bigram,the_most_common_bigram_file,'55','Bigram Count','Hillary Related Tweets: The 25 Most Common Bigrams Chart',the_most_common_bigram_plot)
+
+
+#### The most common 100 bigrams
+
+#common_text_output(count,output_file)
+
+common_text_output(count_search,the_most_common_key_word_count_file)
+
+
+#### The most common donate words with the key words
+
+#common_text_output(count,output_file)
+
+common_text_output(count_donate,the_most_common_donate_word_count_file)
+
 
 # The most common volunteer words with the key words
 
-most_common_100_volunteer_word_cooccurrence= count_volunteer.most_common(100)
+#common_text_output(count,output_file)
 
-most_common_25_volunteer_word_cooccurrence= count_volunteer.most_common(25)
+common_text_output(count_volunteer,the_most_common_volunteer_word_count_file)
 
-most_common_volunteer_word_cooccurrence_output = open(the_most_common_volunteer_word_count_file, 'w')
-
-most_common_volunteer_word_cooccurrence_output.write("%s\n" % '\n '.join(map(str, most_common_100_volunteer_word_cooccurrence)))
-
-most_common_volunteer_word_cooccurrence_output.close()
-
-#### Plot the most common words in a bar chart
-
-words = [x[0] for x in most_common_25_words]
-
-values = [int(x[1]) for x in most_common_25_words]
-
-width=0.6
-mybar = plt.bar(range(len(words)), values, color='green', alpha=0.4)
-ax = plt.axes()
-x_pos = list(range(len(words)))
-ax.set_xticks([p + 0.4 * width for p in x_pos])
-ax.set_xticklabels(words, rotation='50', fontsize=12) # make the most common word as angled labels 
-plt.ylabel('Word Count',fontsize=20)
-plt.title('Hillary Related Tweets: The 25 Most Common Word Chart',fontsize=20)
-plt.legend()
-plt.tight_layout()  # Give the x axis label more space
-plt.savefig(the_most_common_word_plot)
-plt.close()
-
-#### Plot the most common hashs in a bar chart
-
-hash = [z[0] for z in most_common_25_hash]
-
-hash_values = [int(z[1]) for z in most_common_25_hash]
-
-width=0.6
-mybar = plt.bar(range(len(hash)), hash_values, color='green', alpha=0.4)
-ax = plt.axes()
-x_pos = list(range(len(hash)))
-ax.set_xticks([p + 0.4 * width for p in x_pos])
-ax.set_xticklabels(hash, rotation='70', fontsize=12) # make the most common word as angled labels 
-plt.ylabel('Hashtag Count',fontsize=20)
-plt.title('Hillary Related Tweets: The 25 Most Common Hashtags Chart',fontsize=20)
-plt.legend()
-plt.tight_layout()  # Give the x axis label more space
-plt.savefig(the_most_common_hash_plot)
-plt.close()
-
-#### Plot the most common bigrams in a bar chart
-
-bigram = [a[0] for a in most_common_25_bigrams]
-
-bigram_values = [int(a[1]) for a in most_common_25_bigrams]
-
-width=0.6
-mybar = plt.bar(range(len(bigram)), bigram_values, color='green', alpha=0.4)
-ax = plt.axes()
-x_pos = list(range(len(bigram)))
-ax.set_xticks([b + 0.4 * width for b in x_pos])
-ax.set_xticklabels(bigram, rotation='55', fontsize=12) # make the most common word as angled labels 
-plt.ylabel('Bigram Count',fontsize=20)
-plt.title('Hillary Related Tweets: The 25 Most Common Bigrams Chart',fontsize=20)
-plt.legend()
-plt.tight_layout()  # Give the x axis label more space
-plt.savefig(the_most_common_bigram_plot)
-##plt.show()
 
 elapsedTime = time.time()-startTime
+
 print elapsedTime
 
     
